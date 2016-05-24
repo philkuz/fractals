@@ -17,7 +17,7 @@ class PreImage:
         self.w = w
         self.h = h
         self.max = 0
-        self.matrix = [[0]*w] * h
+        self.matrix = [[0 for _ in xrange(w)] for _ in xrange(h)]
         self.set_bounds(real_bounds, imag_bounds)
 
 
@@ -31,58 +31,83 @@ class PreImage:
         self.yR = float(self.h)/imag_ratio
     def sample_point(self):
         ''' Samples across the two axes '''
-        z = self.image_to_complex(random.randint(0, self.w), random.randint(0, self.h))
+        # print 'sample_point'
+        x = random.randint(0, self.w - 1)
+        y = random.randint(0, self.h - 1)
+        z = self.image_to_complex(x, y)
+        # print x, y, z
         return z
     def increment_box(self, z):
-        if not self.in_image(z):
-            return
-        x, y = self.complex_to_image(z)
-        # print x, y
-        p = self.matrix[x][y] + 1
-        self.matrix[x][y] = p
-        self.max = max(p, self.max)
-    def in_image(self, z):
 
-        val = in_axis(z.real, self.rB) and in_axis(z.imag, self.iB)
+        x, y = self.complex_to_image(z)
+        if not self.in_image(x, y):
+            # print z, "is not in image"
+            return
+        # print x, y, "matrix before incrementing"
+        # self.output_matrix()
+        p = self.matrix[x][y] + 1
+        self.matrix[x][y] += 1  
+        # print "matrix after incrementing"
+        # self.output_matrix()
+        self.max = max(p, self.max)
+    def in_image(self, x, y):
+        val = in_axis(x, (0, self.w - 1)) and in_axis(y, (0, self.h -1))
+        # val = in_axis(z.real, self.rB) and in_axis(z.imag, self.iB)
         # if not val:
         #     print "real", z.real, self.rB, in_axis(z.real, self.rB)
         #     print "imag", z.imag, self.iB, in_axis(z.imag, self.iB)
-        return val
+        return x >= 0 and x < self.w and y >= 0 and y < self.h
     def complex_to_image(self, z):
         # print 'real', z.real, xR, real_bounds[0], (z.real - real_bounds[0])
         # print 'imag', z.imag, yR, imag_bounds[0], (z.imag - imag_bounds[0])
-        x = int((z.real - self.rB[0]) / (self.rB[1] - self.rB[0]) * (self.w - 1))
-        y = int((z.imag - self.iB[0]) / (self.iB[1] - self.iB[0]) * (self.h - 1))
+        x = int((z.real - self.rB[0]) / (self.rB[1] - self.rB[0]) * float(self.w - 1))
+        y = int((z.imag - self.iB[0]) / (self.iB[1] - self.iB[0]) * float(self.h - 1))
         # print x, y
 
-        return x, y
+        return x, y #random.randint(0, self.w - 1), random.randint(0, self.h - 1)
     def image_to_complex(self, x, y):
-        real = x * (self.rB[1] - self.rB[0]) / (self.w - 1) + self.rB[0]
-        imag = y * (self.iB[1] - self.iB[0]) / (self.h - 1) + self.iB[0]
+        real = x * (self.rB[1] - self.rB[0]) / float(self.w - 1) + self.rB[0]
+        imag = y * (self.iB[1] - self.iB[0]) / float(self.h - 1) + self.iB[0]
         return complex(real, imag)
     def draw(self, image, colors):
         num_colors = len(colors)
         bin_size = float(self.max) / num_colors
         mtx = image.load()
-        for x in range(self.w):
+        for x in xrange(self.w):
             savedcolors = []
-            for y in range(self.h):
+            for y in xrange(self.h):
 
-                i = self.matrix[x][y] / bin_size
-                decimals = i - int(i)
-                print "suh", i, decimals, int(i)
-                i = int(i)
-                if i <= 0:
-                    color = colors[0]
-                elif i >= num_colors - 1:
-                    color = colors[-1]
-                else:
-                    c1 = colors[i]
-                    c2 = colors[i + 1]
-                    color = mix_colors(c1, c2, decimals)
+                i = self.matrix[x][y] #/ bin_size
+                # decimals = i - int(i)
+                # print "suh", i, decimals, int(i), bin_size, self.max
+                # i = int(i)
+                # if i <= 0:
+                #     color = colors[0]
+                # elif i >= num_colors - 1:
+                #     color = colors[-1]
+                # else:
+                #     c1 = colors[i]
+                #     c2 = colors[i + 1]
+                #     color = mix_colors(c1, c2, decimals)
+
+                # r = i % 4 * 64
+                # g = i % 8 * 32
+                # b = i % 16 * 16
+                r = int(float(i) / self.max * 255)
+                color = r, r, r
                 mtx[x, y] = color
                 savedcolors.append(color)
-            for c in savedcolors:
-                print (x, y), c
+            # for c in savedcolors:
+            #     print c
 
                 # print x, y, color
+    def draw_trajectory(self, c, n):
+        z = c
+        # print 'new trajectory'
+        for _ in xrange(n):
+            self.increment_box(z)
+            # print z, self.complex_to_image(z)
+            z = z * z + c
+    def output_matrix(self):
+        for row in self.matrix:
+            print row

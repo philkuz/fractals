@@ -47,7 +47,7 @@ xa = -2.0
 xb = 1.0
 ya = -1.5
 yb = 1.5
-maxIt = 1000 # iterations
+maxIt = 10000 # iterations
 # image size
 imgx = 512
 imgy = 512
@@ -56,26 +56,36 @@ imgy = 512
 
 
 get_name = namer.name("buddha")
+def in_mandelbrot(c, threshold, iterations):
+    path = []
+    z = c
+    for i in xrange(iterations):
+        path.append(z)
+        if abs(z) > 2.0:
+            return i, path
+        z = z * z + c
 
-def unOptimizedBuddha(samples=int(0.5 * imgx * imgy)):
+    return 0, []
+def unOptimizedBuddha(samples=int(0.1 * imgx * imgy)):
     image = Image.new("RGB", (imgx, imgy))
     matrix = PreImage(real_bounds=(xa, xb), imag_bounds=(ya, yb))
+    # matrix.output_matrix()
     for k in xrange(samples):
         c = matrix.sample_point()
-        z = 0
+        z = c
         path = []
         usePath = False
-        for i in range(maxIt):
-            path.append(z)
-            if abs(z) > 3:
-                usePath = True
-                break
-            z = z * z + c
+        n, path = in_mandelbrot(z, 2.0, maxIt)
+        if n:
+            # print path
+            matrix.draw_trajectory(c, n)
 
-        if usePath:
-            [matrix.increment_box(p) for p in path]
-    matrix.draw(image, ((0,0,0),(255, 255, 255)))# (160, 100, 128), (60, 150, 20), (200, 100, 20)))
 
+        # if usePath:
+        #     [matrix.increment_box(p) for p in path]
+    # matrix.output_matrix()
+    matrix.draw(image, ((0,0,0), (160, 100, 128), (60, 150, 20), (200, 100, 20)))
+    # print matrix.matrix
     # read the current names and go to the next one
 
     image.save(get_name(), "PNG")
