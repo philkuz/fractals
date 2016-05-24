@@ -61,12 +61,12 @@ def in_mandelbrot(c, threshold, iterations):
     z = c
     for i in xrange(iterations):
         path.append(z)
-        if abs(z) > 2.0:
+        if abs(z) > threshold:
             return i, path
         z = z * z + c
 
     return 0, []
-def unOptimizedBuddha(samples=int(0.1 * imgx * imgy)):
+def unOptimizedBuddha(samples=int(0.5 * imgx * imgy)):
     image = Image.new("RGB", (imgx, imgy))
     matrix = PreImage(real_bounds=(xa, xb), imag_bounds=(ya, yb))
     # matrix.output_matrix()
@@ -74,19 +74,11 @@ def unOptimizedBuddha(samples=int(0.1 * imgx * imgy)):
         c = matrix.sample_point()
         z = c
         path = []
-        usePath = False
         n, path = in_mandelbrot(z, 2.0, maxIt)
         if n:
-            # print path
-            matrix.draw_trajectory(c, n)
+            matrix.draw_trajectory(path=path)
 
-
-        # if usePath:
-        #     [matrix.increment_box(p) for p in path]
-    # matrix.output_matrix()
     matrix.draw(image, ((0,0,0), (160, 100, 128), (60, 150, 20), (200, 100, 20)))
-    # print matrix.matrix
-    # read the current names and go to the next one
 
     image.save(get_name(), "PNG")
 unOptimizedBuddha()
