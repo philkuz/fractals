@@ -8,7 +8,7 @@ xa = -2.0
 xb = 1.0
 ya = -1.5
 yb = 1.5
-maxIt = 500 # iterations
+maxIt = 512 # iterations
 # image size
 imgx = 512
 imgy = 512
@@ -32,8 +32,6 @@ for y in xrange(imgy):
         g = i % 8 * 32
         b = i % 16 * 16
         mtx[x, y] =  r,g,b
-
-image.save("mandel.png", "PNG")
 
 # read the current names and go to the next one
 get_name = namer.name("mandel")
