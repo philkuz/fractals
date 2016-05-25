@@ -1,4 +1,4 @@
-import random
+import random, math
 
 # Mix colors with fraction of c1
 def mix_colors(c1, c2, fraction):
@@ -58,10 +58,11 @@ class PreImage:
         bin_size = float(self.max) / num_colors
         mtx = image.load()
         for x in xrange(self.w):
-            savedcolors = []
+            # savedcolors = []
             for y in xrange(self.h):
 
-                # i = self.matrix[x][y] / bin_size
+                # i = min(int(self.matrix[x][y] / bin_size), num_colors - 1)
+                # color  = colors[i]
                 # decimals = i - int(i)
                 # # print "suh", i, decimals, int(i), bin_size, self.max
                 # # i = int(i)
@@ -74,13 +75,15 @@ class PreImage:
                 # #     c2 = colors[i + 1]
                 # #     color = mix_colors(c1, c2, decimals)
                 i = self.matrix[x][y]
-                r = i % 4 * 64
-                g = i % 8 * 32
-                b = i % 16 * 16
-                # r = int(float(i) / self.max * 255)
-                color = int(r), int(g), int(b)
-                mtx[x, y] = color
+                # r = i % 4 * 64
+                # g = i % 8 * 32
+                # b = i % 16 * 16
+                r = int(255 * math.atan(float(i)/ 5))
+                color = r, r, r
+                # color = int(r), int(g), int(b)
+
                 # savedcolors.append(color)
+                mtx[x, y] = color
 
     def draw_trajectory(self, c=0, n=0, path=[]):
         if path:
