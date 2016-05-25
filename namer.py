@@ -19,3 +19,5 @@ def name(basename):
                 break
         return file_name
     return get_name
+def get_name(basename):
+    return name(basename)()

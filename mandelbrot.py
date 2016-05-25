@@ -1,40 +1,28 @@
-import namer
-# Mandelbrot fractal
-# FB - 201003151
-# Modified Andrew Lewis 2010/04/06
-from PIL import Image
-# drawing area (xa < xb and ya < yb)
-xa = -2.0
-xb = 1.0
-ya = -1.5
-yb = 1.5
-maxIt = 512 # iterations
-# image size
-imgx = 512
-imgy = 512
-
-#create mtx for optimized access
-image = Image.new("RGB", (imgx, imgy))
-mtx = image.load()
-
-#optimizations
-lutx = [j * (xb-xa) / (imgx - 1) + xa for j in xrange(imgx)]
-
-for y in xrange(imgy):
-    cy = y * (yb - ya) / (imgy - 1)  + ya
-    for x in xrange(imgx):
-        c = complex(lutx[x], cy)
-        z = 0
-        for i in xrange(maxIt):
-            if abs(z) > 2.0: break
+from fractal import Fractal
+class Mandelbrot(Fractal):
+    """ A class that generates the mandelbrot fractal """
+    def __init__(self, w=512, h=512, real_bounds=(-2.0, 1.0), imag_bounds=(-1.5, 1.5), iterations=512):
+        Fractal.__init__(self, w, h)
+        self.rb = real_bounds
+        self.ib = imag_bounds
+        self.threshold = abs(max(real_bounds + imag_bounds, key = lambda x: abs(x)))
+        self.iterations = iterations
+    def render(self):
+        """ Renders the mandelbrot set on pixel_mat
+        >>> m = Mandelbrot()
+        >>> m.render()
+        """
+        lutx = [j * (self.rb[1] - self.rb[0]) / (self.w - 1) + self.rb[0] for j in xrange(self.w)]
+        for y in xrange(self.h):
+            cy = y * (self.ib[1] - self.ib[0]) / (self.h - 1)  + self.ib[0]
+            for x in xrange(self.w):
+                c = complex(lutx[x], cy)
+                iters = self.in_mandelbrot(0, c)
+                if iters > 0:
+                    self.set_point(x, y, iters)
+    def in_mandelbrot(self, z, c):
+        for i in xrange(self.iterations):
+            if abs(z) > self.threshold:
+                return i
             z = z * z + c
-        r = i % 4 * 64
-        g = i % 8 * 32
-        b = i % 16 * 16
-        mtx[x, y] =  r,g,b
-
-# read the current names and go to the next one
-get_name = namer.name("mandel")
-
-
-image.save(get_name(), "PNG")
+        return -1

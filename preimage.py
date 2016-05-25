@@ -54,6 +54,7 @@ class PreImage:
         imag = y * (self.iB[1] - self.iB[0]) / float(self.h - 1) + self.iB[0]
         return complex(real, imag)
     def draw(self, image, colors):
+        """ Draws self.matrix onto the image """
         num_colors = len(colors)
         bin_size = float(self.max) / num_colors
         mtx = image.load()
@@ -78,7 +79,7 @@ class PreImage:
                 # r = i % 4 * 64
                 # g = i % 8 * 32
                 # b = i % 16 * 16
-                r = int(255 * math.atan(float(i)/ 5))
+                r = int(255 * math.atan(float(i)/ 10))
                 color = r, r, r
                 # color = int(r), int(g), int(b)
 
