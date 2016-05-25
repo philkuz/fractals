@@ -10,12 +10,6 @@ class Buddhabrot(Mandelbrot):
         self.samples = 0
     def set_samples(self, n):
         self.samples = n
-    def sample_point(self):
-        """ Samples the complex plane"""
-        x = random.randint(0, self.w - 1)
-        y = random.randint(0, self.h - 1)
-        z = self.image_to_complex(x, y)
-        return z
     def increment_box(self, z):
         x, y = self.complex_to_image(z)
         if not self.in_image(x, y):

@@ -1,4 +1,5 @@
 from fractal import Fractal
+import random
 class Mandelbrot(Fractal):
     """ A class that generates the mandelbrot fractal """
     def __init__(self, w=512, h=512, real_bounds=(-2.0, 1.0), imag_bounds=(-1.5, 1.5), iterations=512):
@@ -27,6 +28,12 @@ class Mandelbrot(Fractal):
                 return i
             z = z * z + c
         return -1
+    def sample_point(self):
+        """ Samples the complex plane"""
+        x = random.randint(0, self.w - 1)
+        y = random.randint(0, self.h - 1)
+        z = self.image_to_complex(x, y)
+        return z
     def complex_to_image(self, z):
         """ Returns the complex number's position in the image """
         x = int((z.real - self.rb[0]) / (self.rb[1] - self.rb[0]) * float(self.w - 1))
