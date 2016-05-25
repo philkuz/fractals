@@ -21,8 +21,20 @@ class Mandelbrot(Fractal):
                 if iters > 0:
                     self.set_point(x, y, iters)
     def in_mandelbrot(self, z, c):
+        """ Returns whether a point C lies in the mandelbrot set """
         for i in xrange(self.iterations):
             if abs(z) > self.threshold:
                 return i
             z = z * z + c
         return -1
+    def complex_to_image(self, z):
+        """ Returns the complex number's position in the image """
+        x = int((z.real - self.rb[0]) / (self.rb[1] - self.rb[0]) * float(self.w - 1))
+        y = int((z.imag - self.ib[0]) / (self.ib[1] - self.ib[0]) * float(self.h - 1))
+
+        return x, y
+    def image_to_complex(self, x, y):
+        """ Returns the complex number of the coordinate in the image. """
+        real = x * (self.rb[1] - self.rb[0]) / float(self.w - 1) + self.rb[0]
+        imag = y * (self.ib[1] - self.ib[0]) / float(self.h - 1) + self.ib[0]
+        return complex(real, imag)
