@@ -19,6 +19,12 @@ class Buddhabrot(Mandelbrot):
         Mandelbrot.set_point(self, x, y, value)
         if value > self.max:
             self.max = value
+    def get_pixel_value(self, x, y):
+        ''' Returns a normalized pixel value for this image '''
+        if self.max == 0:
+            return 0
+        else:
+            return int(float(self.get_point(x, y)) / self.max * 255)
     def render(self):
         if not self.samples:
             self.set_samples(int(0.5 * self.w * self.h))
@@ -38,3 +44,7 @@ class Buddhabrot(Mandelbrot):
                 return i, path
             z = z * z + c
         return 0, []
+def buddha_color(i):
+ ''' Returns a clamped color for any input based on the arctan function '''
+  r= int(255 * math.atan(float(i)/ 10))
+  return r

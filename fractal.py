@@ -27,6 +27,7 @@ class Fractal:
         self.pixel_mat[x][y] = value
     def get_point(self, x, y):
         return self.pixel_mat[x][y]
+    
     def draw(self, image_name, colorFn=andy_cs):
         """ Draws the intensity values given by pixel_mat
         using the coloration described in colorFn, then saves
