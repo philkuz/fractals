@@ -21,13 +21,15 @@ class Fractal:
         ''' Used as a way to initialize instance variables without
         having to recreate a constructor '''
         pass
+    def render(self):
+        self.pixel_mat = [[0 for _ in xrange(self.w)] for _ in xrange(self.h)]
     def in_image(self, x, y):
         return x >= 0 and x < self.w and y >= 0 and y < self.h
     def set_point(self, x, y, value):
         self.pixel_mat[x][y] = value
     def get_point(self, x, y):
         return self.pixel_mat[x][y]
-    
+
     def draw(self, image_name, colorFn=andy_cs):
         """ Draws the intensity values given by pixel_mat
         using the coloration described in colorFn, then saves

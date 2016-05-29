@@ -1,5 +1,8 @@
+from fractal import Fractal
 from mandelbrot import Mandelbrot
-import random
+
+import random, math
+
 class Buddhabrot(Mandelbrot):
     """ Buddhabrot implementation
     >>> b = Buddhabrot()
@@ -26,6 +29,7 @@ class Buddhabrot(Mandelbrot):
         else:
             return int(float(self.get_point(x, y)) / self.max * 255)
     def render(self):
+        Fractal.render(self)
         if not self.samples:
             self.set_samples(int(0.5 * self.w * self.h))
         for _ in xrange(self.samples):
@@ -44,7 +48,10 @@ class Buddhabrot(Mandelbrot):
                 return i, path
             z = z * z + c
         return 0, []
-def buddha_color(i):
- ''' Returns a clamped color for any input based on the arctan function '''
-  r= int(255 * math.atan(float(i)/ 10))
-  return r
+def atan_color(i):
+    ''' Returns a clamped color for any input based on the arctan function '''
+    r= int(255 * math.atan(float(i)/ 10))
+    return r
+b = Buddhabrot()
+b.render()
+b.draw("buddha", lambda i : (atan_color(i), atan_color(i), atan_color(i)))

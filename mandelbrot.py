@@ -1,5 +1,7 @@
 from fractal import Fractal
 import random
+import math
+
 class Mandelbrot(Fractal):
     """ A class that generates the mandelbrot fractal """
     def __init__(self, w=512, h=512, real_bounds=(-2.0, 1.0), imag_bounds=(-1.5, 1.5), iterations=512):
@@ -13,6 +15,7 @@ class Mandelbrot(Fractal):
         >>> m = Mandelbrot()
         >>> m.render()
         """
+        Fractal.render(self)
         lutx = [j * (self.rb[1] - self.rb[0]) / (self.w - 1) + self.rb[0] for j in xrange(self.w)]
         for y in xrange(self.h):
             cy = y * (self.ib[1] - self.ib[0]) / (self.h - 1)  + self.ib[0]
@@ -28,11 +31,20 @@ class Mandelbrot(Fractal):
                 return i
             z = z * z + c
         return -1
+    def cardioid_test(self, z):
+        """ Returns whether a point is within the cardioid """
+        x = z.real
+        y = z.imag
+        q = math.pow(x- 0.25, 2) + math.pow(y, 2)
+        return q * (q + x - 0.25) < 0.25 * math.pow(y, 2)
+
     def sample_point(self):
         """ Samples the complex plane"""
-        x = random.randint(0, self.w - 1)
-        y = random.randint(0, self.h - 1)
-        z = self.image_to_complex(x, y)
+        z = complex(0, 0)
+        while self.cardioid_test(z):
+            x = random.randint(0, self.w - 1)
+            y = random.randint(0, self.h - 1)
+            z = self.image_to_complex(x, y)
         return z
     def complex_to_image(self, z):
         """ Returns the complex number's position in the image """

@@ -26,7 +26,7 @@ class Nebulabrot:
         mtx = image.load()
         for x in range(self.w):
             for y in range(self.h):
-                mtx[x, y] = tuple([buddha_color(b.get_point(x, y)) for b in self.buddhas])
+                mtx[x, y] = tuple([atan_color(b.get_point(x, y)) for b in self.buddhas])
 
         file_name = namer.get_name(image_name)
         image.save(file_name, "PNG")
