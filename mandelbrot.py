@@ -10,6 +10,11 @@ class Mandelbrot(Fractal):
         self.ib = imag_bounds
         self.threshold = abs(max(real_bounds + imag_bounds, key = lambda x: abs(x)))
         self.iterations = iterations
+    def print_parameters(self):
+        print "\treal bounds:\t", self.rb
+        print "\timag bounds:\t", self.ib
+        print "\titerations:\t", self.iterations
+        print "\tthreshold:\t", self.threshold
     def render(self):
         """ Renders the mandelbrot set on pixel_mat
         >>> m = Mandelbrot()

@@ -8,7 +8,9 @@ class Buddhabrot(Mandelbrot):
     >>> b = Buddhabrot()
     >>> b.render()
     """
-    def setup(self):
+    def __init__(self, w=512, h=512, real_bounds=(-2.0, 1.0), imag_bounds=(-1.5, 1.5), iterations=512, min_path=0):
+        Mandelbrot.__init__(self, w, h, real_bounds, imag_bounds, iterations)
+        self.min_path = min_path
         self.max = 0
         self.samples = 0
     def set_samples(self, n):
@@ -35,7 +37,7 @@ class Buddhabrot(Mandelbrot):
         for _ in xrange(self.samples):
             c = self.sample_point()
             n, path = self.in_mandelbrot(c)
-            if n:
+            if n > self.min_path:
                 self.draw_trajectory(path)
     def draw_trajectory(self, path):
         for z in path: self.increment_box(z)
@@ -48,10 +50,16 @@ class Buddhabrot(Mandelbrot):
                 return i, path
             z = z * z + c
         return 0, []
-def atan_color(i):
+    def print_parameters(self):
+        Mandelbrot.print_parameters(self)
+        print "\tsamples:\t", self.samples
+        print "\tmin path:\t", self.min_path
+def atan_color(i, width=10):
     ''' Returns a clamped color for any input based on the arctan function '''
-    r= int(255 * math.atan(float(i)/ 10))
+    r= int(255 * math.atan(float(i)/width))
     return r
-b = Buddhabrot()
+b = Buddhabrot(iterations=50000, min_path=500)
 b.render()
+
 b.draw("buddha", lambda i : (atan_color(i), atan_color(i), atan_color(i)))
+b.print_parameters()
