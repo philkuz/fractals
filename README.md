@@ -38,7 +38,7 @@ madnel5.png - Threshold 0.1
 mandel6.png - Threshold 100.0 -->
 
 ### Julia
-![julia](img/julia.png)
+![julia](img/julia0.png)
 ####Quick Usage:
 ````
 j = Julia()
