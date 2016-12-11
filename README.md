@@ -2,7 +2,7 @@
 Playing around with cool fractals
 
 ### Buddhabrot
-![buddhabrot](img/buddha110.png)
+![buddhabrot](img/nebula1.png)
 <!-- ![buddhabrot](img/) -->
 ####Quick Usage:
 ````
@@ -12,7 +12,7 @@ b.draw(<file_name>)
 ````
 *Note: Because of the non-uniform densities of buddhabrot traces, I had to do some use a clever coloring to get this drawing to show up nicely. If you use the default color function (the same one that colored the mandelbrot and julia images below),
 you'll end up with something like this:*
-![bad buddha](img/buddha115.png)
+![bad buddha](img/buddha1.png)
 
 The function I used:
 ````
@@ -21,7 +21,7 @@ def buddha_color(i):
   return (r, r, r)
 ````
 ### Mandelbrot
-![mandelbrot](img/mandel8.png)
+![mandelbrot](img/mandel7.png)
 ####Quick Usage:
 ````
 m = Mandelbrot()
@@ -38,7 +38,7 @@ madnel5.png - Threshold 0.1
 mandel6.png - Threshold 100.0 -->
 
 ### Julia
-![julia](img/julia.png)
+![julia](img/julia0.png)
 ####Quick Usage:
 ````
 j = Julia()
