@@ -11,27 +11,27 @@ class Mandelbrot(Fractal):
         self.threshold = abs(max(real_bounds + imag_bounds, key = lambda x: abs(x)))
         self.iterations = iterations
     def print_parameters(self):
-        print "\treal bounds:\t", self.rb
-        print "\timag bounds:\t", self.ib
-        print "\titerations:\t", self.iterations
-        print "\tthreshold:\t", self.threshold
+        print("\treal bounds:\t", self.rb)
+        print("\timag bounds:\t", self.ib)
+        print("\titerations:\t", self.iterations)
+        print("\tthreshold:\t", self.threshold)
     def render(self):
         """ Renders the mandelbrot set on pixel_mat
         >>> m = Mandelbrot()
         >>> m.render()
         """
         Fractal.render(self)
-        lutx = [j * (self.rb[1] - self.rb[0]) / (self.w - 1) + self.rb[0] for j in xrange(self.w)]
-        for y in xrange(self.h):
+        lutx = [j * (self.rb[1] - self.rb[0]) / (self.w - 1) + self.rb[0] for j in range(self.w)]
+        for y in range(self.h):
             cy = y * (self.ib[1] - self.ib[0]) / (self.h - 1)  + self.ib[0]
-            for x in xrange(self.w):
+            for x in range(self.w):
                 c = complex(lutx[x], cy)
                 iters = self.in_mandelbrot(0, c)
                 if iters > 0:
                     self.set_point(x, y, iters)
     def in_mandelbrot(self, z, c):
         """ Returns whether a point C lies in the mandelbrot set """
-        for i in xrange(self.iterations):
+        for i in range(self.iterations):
             if abs(z) > self.threshold:
                 return i
             z = z * z + c

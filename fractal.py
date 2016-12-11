@@ -15,14 +15,14 @@ class Fractal:
     def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.pixel_mat = [[0 for _ in xrange(w)] for _ in xrange(h)]
+        self.pixel_mat = [[0 for _ in range(w)] for _ in range(h)]
         self.setup()
     def setup(self):
         ''' Used as a way to initialize instance variables without
         having to recreate a constructor '''
         pass
     def render(self):
-        self.pixel_mat = [[0 for _ in xrange(self.w)] for _ in xrange(self.h)]
+        self.pixel_mat = [[0 for _ in range(self.w)] for _ in range(self.h)]
     def in_image(self, x, y):
         return x >= 0 and x < self.w and y >= 0 and y < self.h
     def set_point(self, x, y, value):

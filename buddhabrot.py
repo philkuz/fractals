@@ -26,6 +26,7 @@ class Buddhabrot(Mandelbrot):
             self.max = value
     def get_pixel_value(self, x, y):
         ''' Returns a normalized pixel value for this image '''
+        # in case self.max has not been sent yet.
         if self.max == 0:
             return 0
         else:
@@ -34,7 +35,7 @@ class Buddhabrot(Mandelbrot):
         Fractal.render(self)
         if not self.samples:
             self.set_samples(int(0.5 * self.w * self.h))
-        for _ in xrange(self.samples):
+        for _ in range(self.samples):
             c = self.sample_point()
             n, path = self.in_mandelbrot(c)
             if n > self.min_path:
@@ -44,22 +45,24 @@ class Buddhabrot(Mandelbrot):
     def in_mandelbrot(self, c, z=0):
         """ Returns whether a point C lies in the mandelbrot set """
         path = []
-        for i in xrange(self.iterations):
+        for i in range(self.iterations):
             path.append(z)
             if abs(z) > self.threshold:
                 return i, path
             z = z * z + c
         return 0, []
     def print_parameters(self):
+        ''' Ouptuts descriptive parameters of the current generation '''
         Mandelbrot.print_parameters(self)
-        print "\tsamples:\t", self.samples
-        print "\tmin path:\t", self.min_path
+        print("\tsamples:\t", self.samples)
+        print("\tmin path:\t", self.min_path)
 def atan_color(i, width=10):
     ''' Returns a clamped color for any input based on the arctan function '''
     r= int(255 * math.atan(float(i)/width))
     return r
-b = Buddhabrot(iterations=50000, min_path=500)
-b.render()
+if __name__ == "__main__":
+    b = Buddhabrot(iterations=50000, min_path=500)
+    b.render()
 
-b.draw("buddha", lambda i : (atan_color(i), atan_color(i), atan_color(i)))
-b.print_parameters()
+    b.draw("buddha", lambda i : (atan_color(i), atan_color(i), atan_color(i)))
+    b.print_parameters()
